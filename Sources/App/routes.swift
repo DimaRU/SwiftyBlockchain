@@ -40,9 +40,9 @@ func routes(app: Application, blockchain: Blockchain) throws {
     
     struct MineResponce: Content {
         let message: String
-        let index: Int64
+        let index: UInt64
         let transactions: [Transaction]
-        let nonce: Int64
+        let nonce: UInt64
         let previous_hash: String
     }
     
@@ -67,7 +67,7 @@ func routes(app: Application, blockchain: Blockchain) throws {
     struct TransactionRequest: Codable {
         var sender: String
         var recipient: String
-        var amount: Int64
+        var amount: UInt64
     }
     
     app.post("transactions", "add") { request -> Response in

@@ -10,17 +10,17 @@ import CryptoSwift
 import Vapor
 
 struct Block: Codable {
-    var index: Int64
+    var index: UInt64
     var timestamp: TimeInterval
     var transactions: [Transaction]
-    var nonce: Int64
+    var nonce: UInt64
     var previous_hash: String
 }
 
 struct Transaction: Codable {
     var sender: String
     var recipient: String
-    var amount: Int64
+    var amount: UInt64
 }
 
 class Blockchain {
@@ -47,8 +47,8 @@ class Blockchain {
     ///   - prevHash: Hash of previous Block
     ///   - nonce: The nonce given by the Proof of Work algorithm
     /// - Returns: created block
-    func addBlock(prevHash: String?, nonce: Int64) -> Block {
-        let block = Block(index: Int64(chain.count + 1),
+    func addBlock(prevHash: String?, nonce: UInt64) -> Block {
+        let block = Block(index: UInt64(chain.count + 1),
                           timestamp: Date().timeIntervalSince1970,
                           transactions: transactions,
                           nonce: nonce,
@@ -69,7 +69,7 @@ class Blockchain {
     ///   - recipient: recipient address
     ///   - amount: amount transferred
     /// - Returns: The index of the Block that will hold this transaction
-    func addTransaction(sender: String, recipient: String, amount: Int64) -> Int64 {
+    func addTransaction(sender: String, recipient: String, amount: UInt64) -> UInt64 {
         let transaction = Transaction(sender: sender, recipient: recipient, amount: amount)
         transactions.append(transaction)
         
@@ -87,8 +87,8 @@ class Blockchain {
         return str.sha256()
     }
     
-    func proofOfWork(lastNonce: Int64) -> Int64 {
-        var nonce: Int64 = 0
+    func proofOfWork(lastNonce: UInt64) -> UInt64 {
+        var nonce: UInt64 = 0
         while !self.validateProof(prevNonce: lastNonce, nonce: nonce) {
             nonce += 1
         }
@@ -96,7 +96,7 @@ class Blockchain {
         return nonce
     }
     
-    func validateProof(prevNonce: Int64, nonce: Int64) -> Bool {
+    func validateProof(prevNonce: UInt64, nonce: UInt64) -> Bool {
         let guess = "\(prevNonce)\(nonce)"
         let guess_hash = guess.sha256()
         return guess_hash.suffix(4) == "0000"
