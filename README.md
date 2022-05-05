@@ -3,7 +3,7 @@
 
 # Swifty Blockchain
 
-A Blockchain developer course project. Simple blockchain implementation
+A Blockchain developer course project. Simple blockchain implementation. Based on Vapor 4.
 
 
 ## Requirements
