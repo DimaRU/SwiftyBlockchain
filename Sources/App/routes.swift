@@ -2,15 +2,16 @@ import Vapor
 
 extension Application {
     var nodeId: String {
-        let config = self.http.server.configuration
-        return "\(config.hostname):\(config.port)"
+        let hostname = self.http.server.shared.localAddress?.hostname ?? "127.0.0.1"
+        let port = self.http.server.shared.localAddress?.port ?? 8080
+        return "\(hostname):\(port)"
     }
     
 }
 
 func routes(app: Application, blockchain: Blockchain) throws {
     app.get { req -> String in
-        return "Welcome to Swifty Blockchain node \(app.nodeId))"
+        return "Welcome to Swifty Blockchain node \(app.nodeId)"
     }
 
     struct ChainResponce: Content {
@@ -31,9 +32,9 @@ func routes(app: Application, blockchain: Blockchain) throws {
         let replaced = await blockchain.resolveConflicts(app)
 
         if replaced {
-            return ResolveResponce(message: "Our chain was replaced", chain: blockchain.chain)
+            return ResolveResponce(message: "This chain was replaced", chain: blockchain.chain)
         } else {
-            return ResolveResponce(message: "Our chain is authoritative", chain: blockchain.chain)
+            return ResolveResponce(message: "This chain is authoritative", chain: blockchain.chain)
         }
     }
     
